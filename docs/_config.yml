@@ -1,10 +1,10 @@
-title: Dynamic Water
+title: 2D Grass
 markdown: kramdown
 kramdown:
   math-engine: katex
 remote_theme: daattali/beautiful-jekyll
-page-col: "#ffeb80"
-footer-col: "#ffd678"
+page-col: "#87c084"
+footer-col: "#638a76"
 layout: minimal
 plugins:
   - jekyll-title-from-headings
