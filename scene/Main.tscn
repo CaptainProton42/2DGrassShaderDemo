@@ -147,6 +147,7 @@ __meta__ = {
 material = ExtResource( 13 )
 position = Vector2( 85.9019, 260.317 )
 frames = SubResource( 7 )
+frame = 2
 playing = true
 
 [node name="Stone" type="Sprite" parent="."]

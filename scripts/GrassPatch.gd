@@ -31,6 +31,9 @@ func _process(_delta):
 		for i in range(-draw_radius, draw_radius):
 			for j in range(-draw_radius, draw_radius):
 				if (i*i + j*j <= draw_radius):
+					var p = pos + Vector2(i, j)
+					if (p.x > img.get_size().x || p.y > img.get_size().y || p.x < 0 || p.y < 0):
+						continue
 					img.set_pixelv(pos + Vector2(i, j), Color8(cut_length, cut_length, cut_length, 255))
 					
 		texture.set_data(img)
