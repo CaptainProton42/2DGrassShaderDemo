@@ -1,4 +1,4 @@
-# 2D Top-down Grass
+# 2D Grass
 
 <div align="center"><iframe width="640px" height="360px" frameBorder="0" src="grass_shader.html"></iframe></div>
 
