@@ -21,13 +21,13 @@ I'll give a short rundown on how I implemented the grass shader in Godot.
 I decided to use the red channel of a texture as the base for my grass. While this approach may not be suitable for e.g. tile based games it allows great control over the shapes of the grass patches and the texture can be modified on runtime. In the example above, the initial texture looks like this:
 
 <div align="center">
-<img width="50%" src="assets/base_texture.png">
+<img width="65%" src="assets/base_texture.png">
 </div>
 
 This may not look like much. However, if we increase the saturation, the above image will look like this:
 
 <div align="center">
-<img width="50%" src="assets/enhanced_base_texture.png">
+<img width="65%" src="assets/enhanced_base_texture.png">
 </div>
 
 The integer value of the red channel corresponds to the height of the grass in pixels at that position (so a red value of 8 means that the single grass blade originating at this pixel position should be 8 pixels high).
@@ -153,7 +153,10 @@ void fragment() {
 Thus, if a grass blade is is hit by enough wind, it's length gets reduced by one pixel, creating the illusion of gusts pushing down the blades. We also color the corresponding blade tips in a lighter hue to increase the effect.
 
 Our shader now looks like this:
-![second stage of the shader](assets/shader_second_stage.gif)
+
+<div align="center">
+<img width="20%" src="assets/shader_second_stage.gif">
+</div>
 
 We can also sample some noise over time and add it to the UV's y component in order to create the look of frayed grass. We should then also draw the base texture in the bottom color of the gradient below everything else in order remove the noisy fringes at the grass roots:
 
@@ -172,8 +175,11 @@ void fragment() {
 }
 ```
 
-THe result is this:
-![thir stage of the shader](assets/shader_third_stage.gif)
+The result is this:
+
+<div align="center">
+<img width="20%" src="assets/shader_third_stage.gif">
+</div>
 
 ### Clouds and shadows
 
@@ -235,7 +241,9 @@ void fragment() {
 
 Since the base texture is rendered to a separate `Viewport`, we can re-use the `Viewports`'s texture in other shader as well. Creating a material that hides portions of sprites behind grass is a good example of this. Look at this scarecrow for example:
 
-![why is it called scarecrow? i mean it's scaring crows and not a crow itself](assets/scarecrow.gif)
+<div align="center">
+<img width="20%" src="assets/scarecrow.gif">
+</div>
 
 This shader is relativey similar to the grass shader itself and is also included with the project.
 
