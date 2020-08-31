@@ -1,9 +1,10 @@
-[gd_scene load_steps=20 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://assets/textures/texture.png" type="Texture" id=1]
 [ext_resource path="res://assets/textures/gradient.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/worley_noise.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/clouds.png" type="Texture" id=4]
+[ext_resource path="res://assets/shaders/cover.shader" type="Shader" id=5]
 [ext_resource path="res://assets/shaders/grass.shader" type="Shader" id=6]
 [ext_resource path="res://scripts/Label.gd" type="Script" id=7]
 [ext_resource path="res://assets/textures/scarecrow2.png" type="Texture" id=9]
@@ -55,6 +56,17 @@ shader_param/cloud_tex = SubResource( 8 )
 
 [sub_resource type="ViewportTexture" id=10]
 viewport_path = NodePath("ViewportClouds")
+
+[sub_resource type="ViewportTexture" id=11]
+viewport_path = NodePath("ViewportGrass")
+
+[sub_resource type="ShaderMaterial" id=12]
+resource_local_to_scene = true
+shader = ExtResource( 5 )
+shader_param/noise_tex_size = Vector2( 50, 1 )
+shader_param/wind_speed = 1.0
+shader_param/grass_tex = SubResource( 11 )
+shader_param/noise_tex = ExtResource( 3 )
 
 [sub_resource type="SpriteFrames" id=7]
 animations = [ {
@@ -144,10 +156,10 @@ __meta__ = {
 }
 
 [node name="Scarecrow" type="AnimatedSprite" parent="."]
-material = ExtResource( 13 )
+material = SubResource( 12 )
 position = Vector2( 85.9019, 260.317 )
 frames = SubResource( 7 )
-frame = 2
+frame = 1
 playing = true
 
 [node name="Stone" type="Sprite" parent="."]
