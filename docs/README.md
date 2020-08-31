@@ -84,7 +84,7 @@ Let's go through this step by step:
 By specifying a separate tip color (e.g. as an additional `uniform`) and a gradient for the grass blade "stem", we can give the blades a more distinct look. The result then looks like this:
 
 <div align="center">
-<img width="20%" src="assets/shader_first_stage.png">
+<img width="25%" src="assets/shader_first_stage.png">
 </div>
 
 `sampleColor` just samples from the gradient by distance `dist` of the fragment to the blade origin.
@@ -155,7 +155,7 @@ Thus, if a grass blade is is hit by enough wind, it's length gets reduced by one
 Our shader now looks like this:
 
 <div align="center">
-<img width="20%" src="assets/shader_second_stage.gif">
+<img width="25%" src="assets/shader_second_stage.gif">
 </div>
 
 We can also sample some noise over time and add it to the UV's y component in order to create the look of frayed grass. We should then also draw the base texture in the bottom color of the gradient below everything else in order remove the noisy fringes at the grass roots:
@@ -178,7 +178,7 @@ void fragment() {
 The result is this:
 
 <div align="center">
-<img width="20%" src="assets/shader_third_stage.gif">
+<img width="25%" src="assets/shader_third_stage.gif">
 </div>
 
 ### Clouds and shadows
@@ -237,12 +237,13 @@ void fragment() {
 }
 ```
 
+
 ### Additional Notes
 
 Since the base texture is rendered to a separate `Viewport`, we can re-use the `Viewports`'s texture in other shader as well. Creating a material that hides portions of sprites behind grass is a good example of this. Look at this scarecrow for example:
 
 <div align="center">
-<img width="20%" src="assets/scarecrow.gif">
+<img width="25%" src="assets/scarecrow.gif">
 </div>
 
 This shader is relativey similar to the grass shader itself and is also included with the project.
