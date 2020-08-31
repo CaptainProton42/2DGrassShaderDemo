@@ -58,19 +58,19 @@ The basic principle is then quite easy, actually:
 void fragment() {
   vec2 uv = SCREEN_UV;
   COLOR = vec4(0.0f); // Start with clear color.
-	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
-		float blade_length = texture(tex, uv).r;
-		
-		if (blade_length > 0.0f) {
-			if (dist == blade_length) {
-				COLOR = tip_color;
-			} else if (dist < blade_length) {
-				COLOR = sampleColor(dist);
-			}
-		}
-		
-		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
-	}
+  for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
+    float blade_length = texture(tex, uv).r;
+    
+    if (blade_length > 0.0f) {
+      if (dist == blade_length) {
+        COLOR = tip_color;
+      } else if (dist < blade_length) {
+        COLOR = sampleColor(dist);
+      }
+    }
+    
+    uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
+  }
 }
 ```
 
@@ -104,17 +104,17 @@ uniform float wind_speed;
 uniform vec2 wind_direction;
 
 float sineWave(float T, float a, float phase, vec2 dir, vec2 pos) {
-	return a * sin(2.0f * PI / T * dot(dir, pos) + phase);
+  return a * sin(2.0f * PI / T * dot(dir, pos) + phase);
 }
 
 float wind (vec2 pos, float t) {
-	return (sineWave(200.0f, 1.8f, 1.0f*wind_speed*t,
-									 normalize(wind_direction), pos)
-		      + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t,
-										 normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
-		      + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t,
-										 normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
-		     / 3.0f;
+  return (sineWave(200.0f, 1.8f, 1.0f*wind_speed*t,
+                   normalize(wind_direction), pos)
+          + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t,
+                     normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
+          + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t,
+                     normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
+         / 3.0f;
 }
 ```
 
@@ -125,28 +125,28 @@ We then modify the fragment shader as follows:
 ```
 void fragment() {
   vec2 uv = SCREEN_UV;
-	COLOR = vec4(0.0f);	
-	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {	
-		float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);	
-		float blade_length = texture(tex, uv).r * 255.0f;
-		
-		if (blade_length > 0.0f) {
-			if (wind > 0.5f) {
-				blade_length -= 1.0f;
-			}
-			if (dist == blade_length) {
-				if (wind <= 0.5f) {
-					COLOR = tip_color;
-				} else {
-					COLOR = wind_color;
-				}
-			} else if (dist < blade_length) {
-				COLOR = sampleColor(dist);
-			}
-		}
-		
-		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
-	}
+  COLOR = vec4(0.0f);	
+  for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {	
+    float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);	
+    float blade_length = texture(tex, uv).r * 255.0f;
+    
+    if (blade_length > 0.0f) {
+      if (wind > 0.5f) {
+        blade_length -= 1.0f;
+      }
+      if (dist == blade_length) {
+        if (wind <= 0.5f) {
+          COLOR = tip_color;
+        } else {
+          COLOR = wind_color;
+        }
+      } else if (dist < blade_length) {
+        COLOR = sampleColor(dist);
+      }
+    }
+    
+    uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
+  }
 }
 ```
 
@@ -166,12 +166,12 @@ void fragment() {
   vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
 
   if (texture(tex, SCREEN_UV).r > 0.0f) {
-		COLOR = sampleColor(0.0f);
-	} else {
-		COLOR = vec4(0.0f);
-	}
+    COLOR = sampleColor(0.0f);
+  } else {
+    COLOR = vec4(0.0f);
+  }
 
-	...
+  ...
 }
 ```
 
@@ -236,8 +236,7 @@ void fragment() {
   }
 }
 ```
-
-
+<br>
 ### Additional Notes
 
 Since the base texture is rendered to a separate `Viewport`, we can re-use the `Viewports`'s texture in other shader as well. Creating a material that hides portions of sprites behind grass is a good example of this. Look at this scarecrow for example:
