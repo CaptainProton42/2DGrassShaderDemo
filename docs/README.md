@@ -2,17 +2,13 @@
 
 <div style="right:100px; position:relative" align="center"><iframe width="960px" height="540px" frameBorder="0" src="grass_shader.html"></iframe></div>
 
-Click and drag to cut or regrow the grass. Adjust the length of the grass with the top left slider.
-
-## What's so cool about grass?
-
-Grass in video games has always somewhat fascinated me. From the stubbly playing field in Rocket League to the long swaying grass in The Legend of Zelda: Breath of the Wild, well crafted grass is such an elementary detail and executing it well can, in my oppinion, really sell the atmosphere of a game.
+Grass in video games has always somewhat fascinated me. From the stubbly playing field in Rocket League to the long swaying grass in The Legend of Zelda: Breath of the Wild: well crafted grass is such an elementary detail and executing it well can, in my opinion, really sell the atmosphere of a game.
 
 I had to start small, however, and decided to stick with 2D (especially as I'm stuck with my laptop, which does not have a GPU). And while I believe there is still much room for improvement, I think the result of my three-day holiday project is quite satisfying on its own.
 
 ## About
 
-The complete Godot project is hosted on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo). It is licensed under the MIT license so do with it whatever you want, I guess.
+The complete Godot project is hosted on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo). It is licensed under the MIT license so do with it whatever you want.
 
 You can find me on Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) and on Reddit ([/u/CaptainProton42](https://www.reddit.com/user/captainproton42)).
 
@@ -22,31 +18,37 @@ I'll give a short rundown on how I implemented the grass shader in Godot.
 
 ### Base Texture
 
-I decided to use the red channel of a generic texture as a base for my grass. While this approach may not be suitable for e.g. tile based games, it allows great control over the shapes of the grass patches. In the example above, the initial texture looks like this:
+I decided to use the red channel of a texture as the base for my grass. While this approach may not be suitable for e.g. tile based games it allows great control over the shapes of the grass patches and the texture can be modified on runtime. In the example above, the initial texture looks like this:
 
-![base texture](../assets/textures/base_texture.png)
+<div align="center">
+<img width="50%" src="assets/base_texture.png">
+</div>
 
-This may not look like much. However, if we increase the saturation, the above image looks like this:
+This may not look like much. However, if we increase the saturation, the above image will look like this:
 
-![enhanced base texture](assets/enhanced_base_texture.png)
+<div align="center">
+<img width="50%" src="assets/enhanced_base_texture.png">
+</div>
 
-The 8-bit value of the red channel corresponds to the height of the grass in pixels at that position (so a red value of 8 means that the single grass blade originating at this pixel position should be 8 pixels high).
+The integer value of the red channel corresponds to the height of the grass in pixels at that position (so a red value of 8 means that the single grass blade originating at this pixel position should be 8 pixels high).
 
 We render this texture as a `TextureRect` to its own `Viewport` (*ViewportGrass*) so that it can be retreived by other shaders later.
 
-A script is also attached to the `TextureRect` which allows the user to interact with the scene by drawing to the red channel of the texture and thus modifying the grass height at runtime. This could also be used for player interaction by having the player "push down" the grass temporarily.
+A script is also attached to the `TextureRect` which allows the user to interact with the scene by drawing on the red channel of the texture and thus modifying the grass height at runtime. The same approach could also be used for player interaction by having the player "push down" the grass temporarily.
 
 ### The grass shader
 
-Now that we have our base texture set up, we move on to the main attraction: The grass shader itself.
+Now that we have our base texture set up, we can move on to the main attraction: The grass shader itself.
 
-Starting from the base texture, we want to create grass patches whose height corresponds to the base texture's red channel, and sways somewhat in the wind.
+Starting from the base texture, we want to create grass patches whose height corresponds to the base texture's red channel.
 
-We do this by utilizing a fragment shader where each pixel corresponds to a single blade:
+We do this by utilizing a fragment shader assigned to a fullscreen `ColorRect` where each pixel corresponds to a single blade.
 
-We add a new `ColorRect` that spans the whole screen and add the `Viewport` from before as an input via a `ViewportTexture`:
+We add a `uniform sampler2D` to the empty shader which can hold the `Viewport`'s texture from above as a `ViewportTexture`:
 
 ```
+shader_type canvas_item;
+
 uniform sampler2D tex;
 ```
 
@@ -73,15 +75,17 @@ void fragment() {
 ```
 
 Let's go through this step by step:
-1. For each fragment (pixel currently being drawn to by the shader), we read the pixels below it.
-2. For each of these pixels, we read the blade height at their positions from the base texure.
-3. We then check whether the blade is hight enough to reach the original fragment 
+1. For each fragment (the pixel currently being drawn to by the shader), we loop through the pixels below it.
+2. For each of these pixels, we read the grass height at their positions from the base texure.
+3. We then check whether the grass is high enough to reach the original fragment 
     a. If so, we color the fragment.
     b. If not, we leave it alone.
     
-By specifying a separate tip color (e.g. as an additional `uniform`) and a gradient for the blade "stem", we can give the blades a more distinct look. The result then looks like this:
+By specifying a separate tip color (e.g. as an additional `uniform`) and a gradient for the grass blade "stem", we can give the blades a more distinct look. The result then looks like this:
 
-![first stage of the shader](assets/shader_first_stage.png)
+<div align="center">
+<img width="20%" src="assets/shader_first_stage.png">
+</div>
 
 `sampleColor` just samples from the gradient by distance `dist` of the fragment to the blade origin.
 
