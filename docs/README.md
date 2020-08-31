@@ -54,10 +54,10 @@ The basic principle is then quite easy, actually:
 
 ```
 void fragment() {
-    COLOR = vec4(0.0f); // Start with clear color.
     vec2 uv = SCREEN_UV;
+    COLOR = vec4(0.0f); // Start with clear color.
 	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
-		float blade_length = texture(tex, uv);
+		float blade_length = texture(tex, uv).r;
 		
 		if (blade_length > 0.0f) {
 			if (dist == blade_length) {
@@ -115,20 +115,18 @@ I found the above combination of three sine waves to be quite visually pleasing 
 
 We then modify the fragment shader as follows:
 
-<pre><code>
+```
 void fragment() {
-    COLOR = vec4(0.0f); // Start with clear color.
     vec2 uv = SCREEN_UV;
-    for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
-        <a style="background-color:yellow;">float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);</a>
-
-        float blade_length = texture(tex, uv);
-
+	COLOR = vec4(0.0f);	
+	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {	
+		float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);	
+		float blade_length = texture(tex, uv).r * 255.0f;
+		
 		if (blade_length > 0.0f) {
-            if (wind > 0.5f) {
+			if (wind > 0.5f) {
 				blade_length -= 1.0f;
 			}
-
 			if (dist == blade_length) {
 				if (wind <= 0.5f) {
 					COLOR = tip_color;
@@ -143,6 +141,97 @@ void fragment() {
 		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
 	}
 }
-</code></pre>
+```
 
 Thus, if a grass blade is is hit by enough wind, it's length gets reduced by one pixel, creating the illusion of gusts pushing down the blades. We also color the corresponding blade tips in a lighter hue to increase the effect.
+
+Our shader now looks like this:
+![second stage of the shader](assets/shader_second_stage.gif)
+
+We can also sample some noise over time and add it to the UV's y component in order to create the look of frayed grass. We should then also draw the base texture in the bottom color of the gradient below everything else in order remove the noisy fringes at the grass roots:
+
+```
+void fragment() {
+    float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
+    vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
+
+    if (texture(tex, SCREEN_UV).r > 0.0f) {
+		COLOR = sampleColor(0.0f);
+	} else {
+		COLOR = vec4(0.0f);
+	}
+
+    ...
+}
+```
+
+THe result is this:
+![thir stage of the shader](assets/shader_third_stage.gif)
+
+### Clouds and shadows
+
+To give the scene some more depth and demonstrate how the shader can interact with the environment, especially shadows, we can add some clouds (or at least their shadows).
+
+For that, we use a separate `Viewport`, again, to which we render the cloud shadows.
+
+For regular objects, we can then use a `Light2D` which uses a `ViewportTexture` and subtract mode. We could probably do the same for the grass and then modify its lighting shader but I decided to include this directly in the fragment shader for simplicity.
+
+Adding the clouds in the fragment shader is easily done by adding the line
+
+```
+COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+```
+
+whenever drawing to a fragment.
+
+The complete fragment shader now looks like this (without helper functions):
+
+```
+void fragment() {
+	float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
+	vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
+
+	if (texture(tex, SCREEN_UV).r > 0.0f) {
+		COLOR = sampleColor(0.0f);
+		COLOR -= vec4(vec3(texture(cloud_tex, SCREEN_UV).r), 0.0f);
+	} else {
+		COLOR = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+	}
+	
+	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {
+		float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);		
+		float blade_length = sampleBladeLength(uv);
+		
+		if (blade_length > 0.0f) {
+			if (wind > 0.5f) {
+				blade_length -= 1.0f;
+			}
+			
+			if (dist == blade_length) {
+				if (wind <= 0.5f) {
+					COLOR = tip_color;
+				} else {
+					COLOR = wind_color;
+				}
+				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+			} else if (dist < blade_length) {
+				COLOR = sampleColor(dist);
+				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+			}
+		}
+		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
+	}
+}
+```
+
+### Additional Notes
+
+Since the base texture is rendered to a separate `Viewport`, we can re-use the `Viewports`'s texture in other shader as well. Creating a material that hides portions of sprites behind grass is a good example of this. Look at this scarecrow for example:
+
+![why is it called scarecrow? i mean it's scaring crows and not a crow itself](assets/scarecrow.gif)
+
+This shader is relativey similar to the grass shader itself and is also included with the project.
+
+## Conclusion
+
+I hope this small writeup was somewhat helpful or at least interesting to you. You're welcome to leave feadback at my Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) or directly on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo/issues).

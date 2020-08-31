@@ -38,25 +38,6 @@ float wind (vec2 pos, float t) {
 }
 
 void fragment() {
-	COLOR = vec4(0.0f);	
-    vec2 uv = SCREEN_UV;
-	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
-		float blade_length = texture(tex, uv).r * 255.0f;
-		
-		if (blade_length > 0.0f) {
-			if (dist == blade_length) {
-				COLOR = tip_color;
-			} else if (dist < blade_length) {
-				COLOR = sampleColor(dist);
-			}
-		}
-		
-		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
-	}
-}
-/*
-
-void fragment() {
 	// First, sample some 1D noise
 	float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
 	// Add the nose to the uv for frayed grass
@@ -107,4 +88,4 @@ void fragment() {
 		// Move on to the next pixel, down the blades
 		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
 	}
-}*/
+}

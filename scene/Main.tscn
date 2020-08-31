@@ -157,8 +157,9 @@ __meta__ = {
 
 [node name="Scarecrow" type="AnimatedSprite" parent="."]
 material = SubResource( 12 )
-position = Vector2( 85.9019, 260.317 )
+position = Vector2( 85.9019, 247.074 )
 frames = SubResource( 7 )
+frame = 1
 playing = true
 
 [node name="Stone" type="Sprite" parent="."]
