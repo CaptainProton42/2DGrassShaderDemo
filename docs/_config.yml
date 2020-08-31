@@ -5,6 +5,7 @@ kramdown:
 remote_theme: daattali/beautiful-jekyll
 page-col: "#87c084"
 footer-col: "#638a76"
+text-col: "#374639"
 layout: minimal
 plugins:
   - jekyll-title-from-headings
