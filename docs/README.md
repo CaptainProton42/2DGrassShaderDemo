@@ -1,14 +1,14 @@
 # 2D Grass
 
-<div align="center"><iframe width="640px" height="360px" frameBorder="0" src="grass_shader.html"></iframe></div>
+<div align="center"><iframe width="960px" height="540px" frameBorder="0" src="grass_shader.html"></iframe></div>
 
 Click and drag to cut or regrow the grass. Adjust the length of the grass with the top left slider.
 
 ## What's so cool about grass?
 
-Grass in video games has always somewhat fascinated me. From the soccer field in Rocket League to the swaying grass in Breath of the Wild, well crafted grass is such an elementary detail and executing it well can, in my oppinion, really sell the atmosphere of a game.
+Grass in video games has always somewhat fascinated me. From the stubbly playing field in Rocket League to the long swaying grass in The Legend of Zelda: Breath of the Wild, well crafted grass is such an elementary detail and executing it well can, in my oppinion, really sell the atmosphere of a game.
 
-I had to start small, however, and decided to stick with 2D (especially as I'm stick with my laptop, which does not have a GPU). And while I believe there is still much room for improvement, I think the result of my three-day holiday project is quite satisfying on its own.
+I had to start small, however, and decided to stick with 2D (especially as I'm stuck with my laptop, which does not have a GPU). And while I believe there is still much room for improvement, I think the result of my three-day holiday project is quite satisfying on its own.
 
 ## About
 
@@ -104,9 +104,12 @@ float sineWave(float T, float a, float phase, vec2 dir, vec2 pos) {
 }
 
 float wind (vec2 pos, float t) {
-	return (sineWave(200.0f, 1.8f, 1.0f*wind_speed*t, normalize(wind_direction), pos)
-		      + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t, normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
-		      + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t, normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
+	return (sineWave(200.0f, 1.8f, 1.0f*wind_speed*t,
+									 normalize(wind_direction), pos)
+		      + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t,
+										 normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
+		      + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t,
+										 normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
 		     / 3.0f;
 }
 ```
@@ -234,4 +237,4 @@ This shader is relativey similar to the grass shader itself and is also included
 
 ## Conclusion
 
-I hope this small writeup was somewhat helpful or at least interesting to you. You're welcome to leave feadback at my Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) or directly in the issues on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo/issues).
+I hope this small writeup was somewhat helpful or at least interesting to you. You're welcome to leave feedback at my Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) or directly in the issues on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo/issues).
