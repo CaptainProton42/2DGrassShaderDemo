@@ -1,6 +1,6 @@
 [gd_scene load_steps=23 format=2]
 
-[ext_resource path="res://assets/textures/texture.png" type="Texture" id=1]
+[ext_resource path="res://assets/textures/base_texture.png" type="Texture" id=1]
 [ext_resource path="res://assets/textures/gradient.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/worley_noise.png" type="Texture" id=3]
 [ext_resource path="res://assets/textures/clouds.png" type="Texture" id=4]
@@ -159,7 +159,6 @@ __meta__ = {
 material = SubResource( 12 )
 position = Vector2( 85.9019, 260.317 )
 frames = SubResource( 7 )
-frame = 1
 playing = true
 
 [node name="Stone" type="Sprite" parent="."]

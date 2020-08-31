@@ -34,7 +34,7 @@ func _process(_delta):
 					var p = pos + Vector2(i, j)
 					if (p.x > img.get_size().x || p.y > img.get_size().y || p.x < 0 || p.y < 0):
 						continue
-					img.set_pixelv(pos + Vector2(i, j), Color8(cut_length, cut_length, cut_length, 255))
+					img.set_pixelv(pos + Vector2(i, j), Color8(cut_length, 0, 0, 255))
 					
 		texture.set_data(img)
 
