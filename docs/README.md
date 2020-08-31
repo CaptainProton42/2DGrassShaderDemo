@@ -54,8 +54,8 @@ The basic principle is then quite easy, actually:
 
 ```
 void fragment() {
-    vec2 uv = SCREEN_UV;
-    COLOR = vec4(0.0f); // Start with clear color.
+  vec2 uv = SCREEN_UV;
+  COLOR = vec4(0.0f); // Start with clear color.
 	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {		
 		float blade_length = texture(tex, uv).r;
 		
@@ -105,9 +105,9 @@ float sineWave(float T, float a, float phase, vec2 dir, vec2 pos) {
 
 float wind (vec2 pos, float t) {
 	return (sineWave(200.0f, 1.8f, 1.0f*wind_speed*t, normalize(wind_direction), pos)
-		   + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t, normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
-		   + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t, normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
-		   / 3.0f;
+		      + sineWave(70.0f, 0.1f, 2.0f*wind_speed*t, normalize(wind_direction - vec2(0.0f, 0.4f)), pos)
+		      + sineWave(75.0f, 0.1f, 1.5f*wind_speed*t, normalize(wind_direction + vec2(0.4f, 0.0f)), pos))
+		     / 3.0f;
 }
 ```
 
@@ -117,7 +117,7 @@ We then modify the fragment shader as follows:
 
 ```
 void fragment() {
-    vec2 uv = SCREEN_UV;
+  vec2 uv = SCREEN_UV;
 	COLOR = vec4(0.0f);	
 	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {	
 		float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);	
@@ -152,16 +152,16 @@ We can also sample some noise over time and add it to the UV's y component in or
 
 ```
 void fragment() {
-    float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
-    vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
+  float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
+  vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
 
-    if (texture(tex, SCREEN_UV).r > 0.0f) {
+  if (texture(tex, SCREEN_UV).r > 0.0f) {
 		COLOR = sampleColor(0.0f);
 	} else {
 		COLOR = vec4(0.0f);
 	}
 
-    ...
+	...
 }
 ```
 
@@ -188,39 +188,39 @@ The complete fragment shader now looks like this (without helper functions):
 
 ```
 void fragment() {
-	float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
-	vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
+  float noise = sampleNoise(UV, SCREEN_PIXEL_SIZE, 0.1f * wind_speed * TIME);
+  vec2 uv = SCREEN_UV - vec2(0.0f, SCREEN_PIXEL_SIZE.y * noise);
 
-	if (texture(tex, SCREEN_UV).r > 0.0f) {
-		COLOR = sampleColor(0.0f);
-		COLOR -= vec4(vec3(texture(cloud_tex, SCREEN_UV).r), 0.0f);
-	} else {
-		COLOR = vec4(0.0f, 0.0f, 0.0f, 0.0f);
-	}
-	
-	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {
-		float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);		
-		float blade_length = sampleBladeLength(uv);
-		
-		if (blade_length > 0.0f) {
-			if (wind > 0.5f) {
-				blade_length -= 1.0f;
-			}
-			
-			if (dist == blade_length) {
-				if (wind <= 0.5f) {
-					COLOR = tip_color;
-				} else {
-					COLOR = wind_color;
-				}
-				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
-			} else if (dist < blade_length) {
-				COLOR = sampleColor(dist);
-				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
-			}
-		}
-		uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
-	}
+  if (texture(tex, SCREEN_UV).r > 0.0f) {
+    COLOR = sampleColor(0.0f);
+    COLOR -= vec4(vec3(texture(cloud_tex, SCREEN_UV).r), 0.0f);
+  } else {
+    COLOR = vec4(0.0f, 0.0f, 0.0f, 0.0f);
+  }
+
+  for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {
+    float wind = wind(uv / SCREEN_PIXEL_SIZE, TIME);		
+    float blade_length = sampleBladeLength(uv);
+
+    if (blade_length > 0.0f) {
+      if (wind > 0.5f) {
+        blade_length -= 1.0f;
+      }
+
+      if (dist == blade_length) {
+        if (wind <= 0.5f) {
+          COLOR = tip_color;
+        } else {
+          COLOR = wind_color;
+        }
+        COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+      } else if (dist < blade_length) {
+        COLOR = sampleColor(dist);
+        COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+      }
+    }
+    uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);
+  }
 }
 ```
 
@@ -234,4 +234,4 @@ This shader is relativey similar to the grass shader itself and is also included
 
 ## Conclusion
 
-I hope this small writeup was somewhat helpful or at least interesting to you. You're welcome to leave feadback at my Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) or directly on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo/issues).
+I hope this small writeup was somewhat helpful or at least interesting to you. You're welcome to leave feadback at my Twitter ([@CaptainProton42](https://twitter.com/captainproton42)) or directly in the issues on [GitHub](https://github.com/CaptainProton42/2DGrassShaderDemo/issues).
