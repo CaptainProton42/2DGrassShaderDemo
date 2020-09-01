@@ -56,7 +56,7 @@ animations = [ {
 "speed": 5.0
 } ]
 
-[node name="Node2D" type="Node2D"]
+[node name="Main" type="Node2D"]
 
 [node name="ViewportClouds" type="Viewport" parent="."]
 size = Vector2( 640, 360 )
@@ -111,7 +111,6 @@ mode = 1
 material = SubResource( 5 )
 position = Vector2( 85.9019, 247.074 )
 frames = SubResource( 6 )
-frame = 2
 playing = true
 
 [node name="Stone" type="Sprite" parent="."]

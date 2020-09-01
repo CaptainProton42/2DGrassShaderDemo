@@ -4,10 +4,10 @@
 [ext_resource path="res://assets/textures/gradient.png" type="Texture" id=2]
 [ext_resource path="res://assets/textures/noise.png" type="Texture" id=3]
 
-[sub_resource type="ViewportTexture" id=8]
+[sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("ViewportClouds")
 
-[sub_resource type="ViewportTexture" id=9]
+[sub_resource type="ViewportTexture" id=2]
 viewport_path = NodePath("ViewportGrass")
 
 [resource]
@@ -19,6 +19,6 @@ shader_param/tip_color = Color( 0.996078, 0.976471, 0.517647, 1 )
 shader_param/wind_color = Color( 1, 0.984314, 0.639216, 1 )
 shader_param/noise_tex_size = Vector2( 50, 1 )
 shader_param/gradient = ExtResource( 2 )
-shader_param/tex = SubResource( 9 )
+shader_param/tex = SubResource( 2 )
 shader_param/noise_tex = ExtResource( 3 )
-shader_param/cloud_tex = SubResource( 8 )
+shader_param/cloud_tex = SubResource( 1 )

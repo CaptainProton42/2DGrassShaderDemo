@@ -3,7 +3,6 @@
 [ext_resource path="res://assets/shaders/cover.shader" type="Shader" id=1]
 [ext_resource path="res://assets/textures/noise.png" type="Texture" id=2]
 
-
 [sub_resource type="ViewportTexture" id=1]
 viewport_path = NodePath("Grass")
 
