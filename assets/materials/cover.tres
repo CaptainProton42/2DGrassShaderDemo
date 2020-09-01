@@ -3,13 +3,13 @@
 [ext_resource path="res://assets/shaders/cover.shader" type="Shader" id=1]
 [ext_resource path="res://assets/textures/worley_noise.png" type="Texture" id=2]
 
-[sub_resource type="ViewportTexture" id=11]
-viewport_path = NodePath("ViewportGrass")
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("Grass")
 
 [resource]
 resource_local_to_scene = true
 shader = ExtResource( 1 )
 shader_param/noise_tex_size = Vector2( 50, 1 )
 shader_param/wind_speed = 1.0
-shader_param/grass_tex = SubResource( 11 )
+shader_param/grass_tex = SubResource( 1 )
 shader_param/noise_tex = ExtResource( 2 )

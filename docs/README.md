@@ -2,7 +2,7 @@
 
 <div style="right:100px; position:relative" align="center"><iframe width="960px" height="540px" frameBorder="0" src="grass_shader.html"></iframe></div>
 
-Grass in video games has always somewhat fascinated me. From the stubbly playing field in Rocket League to the long swaying grass in The Legend of Zelda: Breath of the Wild: well crafted grass is such an elementary detail and executing it well can, in my opinion, really sell the atmosphere of a game.
+Grass in video games has always somewhat fascinated me. From the stubbly playing field in Rocket League to the long swaying grass in The Legend of Zelda: Breath of the Wild, grass is such an elementary detail and crafting it well can, in my opinion, really sell the atmosphere of a game.
 
 I had to start small, however, and decided to stick with 2D (especially as I'm stuck with my laptop, which does not have a GPU). And while I believe there is still much room for improvement, I think the result of my three-day holiday project is quite satisfying on its own.
 
@@ -14,11 +14,11 @@ You can find me on Twitter ([@CaptainProton42](https://twitter.com/captainproton
 
 ## Tutorial
 
-I'll give a short rundown on how I implemented the grass shader in Godot.
+I'll try to give a small rundown of the grass shader below. I left out most of the helper functions like `sampleBladeLength` for brevity. The complete code is included in the project.
 
 ### Base Texture
 
-I decided to use the red channel of a texture as the base for my grass. While this approach may not be suitable for e.g. tile based games it allows great control over the shapes of the grass patches and the texture can be modified on runtime. In the example above, the initial texture looks like this:
+I decided to use a texture as the base for my grass. While this approach may not be suitable for e.g. tile based games, it allows great control over the shapes of the grass patches and the texture can be modified on runtime. In the example above, the initial texture looks like this:
 
 <div align="center">
 <img width="65%" src="assets/base_texture.png">
@@ -30,9 +30,9 @@ This may not look like much. However, if we increase the saturation, the above i
 <img width="65%" src="assets/enhanced_base_texture.png">
 </div>
 
-The integer value of the red channel corresponds to the height of the grass in pixels at that position (so a red value of 8 means that the single grass blade originating at this pixel position should be 8 pixels high).
+The integer value of the red channel corresponds to the height of the grass (so a red value of 8 means that the single grass blade originating at this pixel position should be 8 pixels high).
 
-We render this texture as a `TextureRect` to its own `Viewport` (*ViewportGrass*) so that it can be retreived by other shaders later.
+We render this texture as a `TextureRect` to its own `Viewport` (*ViewportGrass*) so that it can be accessed by other shaders later.
 
 A script is also attached to the `TextureRect` which allows the user to interact with the scene by drawing on the red channel of the texture and thus modifying the grass height at runtime. The same approach could also be used for player interaction by having the player "push down" the grass temporarily.
 
@@ -158,7 +158,7 @@ Our shader now looks like this:
 <img width="25%" src="assets/shader_second_stage.gif">
 </div>
 
-We can also sample some noise over time and add it to the UV's y component in order to create the look of frayed grass. We should then also draw the base texture in the bottom color of the gradient below everything else in order remove the noisy fringes at the grass roots:
+We can also sample some noise and move it over time then add it to the UV's y component in order to create the look of frayed grass. We should then also draw the base texture below everything else in order remove the noisy fringes at the grass roots:
 
 ```
 void fragment() {
@@ -185,14 +185,14 @@ The result is this:
 
 To give the scene some more depth and demonstrate how the shader can interact with the environment, especially shadows, we can add some clouds (or at least their shadows).
 
-For that, we use a separate `Viewport`, again, to which we render the cloud shadows.
+For that, we use a separate `Viewport`, again, to which we render the cloud shadows (or any other shadows occuring in the scene).
 
 For regular objects, we can then use a `Light2D` which uses a `ViewportTexture` and subtract mode. We could probably do the same for the grass and then modify its lighting shader but I decided to include this directly in the fragment shader for simplicity.
 
 Adding the clouds in the fragment shader is easily done by adding the line
 
 ```
-COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
 ```
 
 whenever drawing to a fragment.
@@ -206,7 +206,7 @@ void fragment() {
 
   if (texture(tex, SCREEN_UV).r > 0.0f) {
     COLOR = sampleColor(0.0f);
-    COLOR -= vec4(vec3(texture(cloud_tex, SCREEN_UV).r), 0.0f);
+    COLOR -= vec4(texture(cloud_tex, SCREEN_UV).rgb, 0.0f);
   } else {
     COLOR = vec4(0.0f, 0.0f, 0.0f, 0.0f);
   }
@@ -226,10 +226,10 @@ void fragment() {
         } else {
           COLOR = wind_color;
         }
-        COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+        COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
       } else if (dist < blade_length) {
         COLOR = sampleColor(dist);
-        COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+        COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
       }
     }
     uv -= vec2(0.0f, SCREEN_PIXEL_SIZE.y);

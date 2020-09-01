@@ -46,7 +46,7 @@ void fragment() {
 	// Color the base of the grass with the first gradient color
 	if (texture(tex, SCREEN_UV).r > 0.0f) {
 		COLOR = sampleColor(0.0f);
-		COLOR -= vec4(vec3(texture(cloud_tex, SCREEN_UV).r), 0.0f);
+		COLOR -= vec4(texture(cloud_tex, SCREEN_UV).rgb, 0.0f);
 	} else {
 		COLOR = vec4(0.0f, 0.0f, 0.0f, 0.0f);
 	}
@@ -75,13 +75,13 @@ void fragment() {
 				}
 				
 				// Add the cloud shadow
-				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+				COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
 			} else if (dist < blade_length) {
 				// Color grass stems
 				COLOR = sampleColor(dist);
 				
 				// Add the cloud shadow
-				COLOR -= vec4(vec3(texture(cloud_tex, uv).r), 0.0f);
+				COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
 			}
 		}
 		

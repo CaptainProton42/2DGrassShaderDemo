@@ -25,7 +25,7 @@ void fragment() {
 	vec2 uv = SCREEN_UV - vec2(0.0f, height * SCREEN_PIXEL_SIZE.y);
 	
 	// We need to look for blades below the sprite until we reach the max blade length
-	for (float i = 0.0f; i < MAX_BLADE_LENGTH; ++i) {
+	for (float dist = 0.0f; dist < MAX_BLADE_LENGTH; ++dist) {
 		// Sample the blade length
 		float blade_length = texture(grass_tex, uv).r * 255.0f;
 		blade_length += noise; // and add some noise
