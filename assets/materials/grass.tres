@@ -2,7 +2,7 @@
 
 [ext_resource path="res://assets/shaders/grass.shader" type="Shader" id=1]
 [ext_resource path="res://assets/textures/gradient.png" type="Texture" id=2]
-[ext_resource path="res://assets/textures/worley_noise.png" type="Texture" id=3]
+[ext_resource path="res://assets/textures/noise.png" type="Texture" id=3]
 
 [sub_resource type="ViewportTexture" id=8]
 viewport_path = NodePath("ViewportClouds")
