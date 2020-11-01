@@ -66,7 +66,7 @@ void fragment() {
 			}
 			
 			// Color basec on distance from root
-			if (dist == blade_length) {
+			if (abs(dist - blade_length) < 0.0000001) {
 				// Color grass tips
 				if (wind <= 0.5f) {
 					COLOR = tip_color;
