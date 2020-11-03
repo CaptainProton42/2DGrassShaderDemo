@@ -76,6 +76,7 @@ void fragment() {
 				
 				// Add the cloud shadow
 				COLOR -= vec4(texture(cloud_tex, uv).rgb, 0.0f);
+				break;
 			} else if (dist < blade_length) {
 				// Color grass stems
 				COLOR = sampleColor(dist);
